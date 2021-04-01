@@ -1,17 +1,4 @@
 Version="Ver 1.3.0-20210331"
-'和暦対応
-'V1.3 2021/03/31 Mutex
-'V1.2 2021/03/25 ごみバコ実装
-'V1.1 2021/03/24 DarkMode実装実装
-'V1.0 2021/03/20 簡易メモ帳として実装
-'V0.11 2019/05/27 バックアップをわかるようにした
-'V0.11 2019/05/13 バックアップ機能
-'V0.10 2019/04/25 ほかの人用のカスタマイズ版
-
-'Interbalではなく文字を入力するたびに
-'メモリにコピーする。Intervalでコントロールに触れない
-
-'DebugMode="true"
 DebugMode="false"
 sbCr = Text.GetCharacter(13)
 sbLf =  Text.GetCharacter(10)
@@ -36,20 +23,6 @@ Sub InitLoad
   endfor
   If DebugMode="true" Then
     userName= "memo" 
-    inittext = "memo" 
-    confWidth = 800
-    confHeight = 600
-    confFontName = "Meiryo UI"
-    confFontSize = 16
-    confBrushColor = "Black"
-    confBackgroundColor = "green"
-    File.WriteLine(ConfFile1,1,userName)
-    File.WriteLine(ConfFile1,2,confWidth)
-    File.WriteLine(ConfFile1,3,confHeight)
-    File.WriteLine(ConfFile1,4,confFontName)
-    File.WriteLine(ConfFile1,5,confFontSize)
-    File.WriteLine(ConfFile1,6,confBrushColor)
-    File.WriteLine(ConfFile1,7,confBackgroundColor)
   Else
     userName= File.ReadLine(ConfFile1,1)
     confWidth = File.ReadLine(ConfFile1,2)
@@ -78,25 +51,18 @@ Sub InitCommon
   GraphicsWindow.Height = confHeight
   GraphicsWindow.BrushColor = confBrushColor
   GraphicsWindow.BackgroundColor = confBackgroundColor
-
   GraphicsWindow.FontName = confFontName
   GraphicsWindow.FontSize = confFontSize
-  
   memo = Controls.AddMultiLineTextBox(1, 50)
   Controls.SetSize(memo, GraphicsWindow.Width-2, GraphicsWindow.Height-55)
   Controls.SetTextBoxText(memo, TextData[DataCurrent])
-  
   ScanTitle()
-  'ExtLib.DisableExitButton()
   ExtLib.DisableMaxMinExitButton()
   if Text.ConvertToUpperCase(confDark) = "DARK" then
     a=ExtLib.SetDarkmodeControl(memo)
     ExtLib.SetDarkMode_Explorer("dark")
   EndIf
   ExtLib.SetFocusControl(memo)
-  'ExtLib.WSendKeys("{{kanji}}")
-  'ExtLib.SendIMEKeys()
-  'ExtLib.SendIMEKey2hanzen()
 EndSub
 
 Sub textChanged
@@ -122,10 +88,8 @@ Sub UPDATEINTERVAL
   ExtLib.MutexRelease()
 EndSub
 
-
 Sub BUTTONCLICK
   tmiddle= Clock.ElapsedMilliseconds
-  'TextUnsaved[DataCurrent] = TextUnsaved[DataCurrent] + 1
   ScanTitle()
   SaveLocalFile()
   If Controls.LastClickedButton = SaveButton1 Then
