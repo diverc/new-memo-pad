@@ -1,17 +1,5 @@
-'memo1
 Version="Ver 1.00.7-20210320"
-'和暦対応
-'V1.00 2021/03/20 簡易メモ帳として実装
-'V0.11 2019/05/27 バックアップをわかるようにした
-'V0.11 2019/05/13 バックアップ機能
-'V0.10 2019/04/25 ほかの人用のカスタマイズ版
 
-'V2.00 2021/03/20 保存なしの切替 Editaro
-'V3.00 2021/03/20 MacMemo
-
-'終了時のイベント
-
-'DebugMode="true"
 DebugMode="false"
 sbCr = Text.GetCharacter(13)
 sbLf =  Text.GetCharacter(10)
@@ -27,30 +15,11 @@ Controls.ButtonClicked = BUTTONCLICK
 Timer.Interval = 60000
 Timer.Tick = UPDATEINTERVAL
 
-'-------------------------
-
 Sub InitLoad
   ConfFile1 = File.GetSettingsFilePath() + "-conf"
   ConfFile2 = File.GetSettingsFilePath() + "-init"
   If DebugMode="true" Then
     userName= "memo" 
-    inittext = "memo" 
-    confWidth = 800
-    confHeight = 600
-    confFontName = "Meiryo UI"
-    confFontSize = 16
-    confBrushColor = "Black"
-    confBackgroundColor = "green"
-    File.WriteContents(ConfFile2,inittext)
-    File.WriteLine(ConfFile1,1,userName)
-    File.WriteLine(ConfFile1,2,confWidth)
-    File.WriteLine(ConfFile1,3,confHeight)
-    File.WriteLine(ConfFile1,4,confFontName)
-    File.WriteLine(ConfFile1,5,confFontSize)
-    File.WriteLine(ConfFile1,6,confBrushColor)
-    File.WriteLine(ConfFile1,7,confBackgroundColor)
-    File.WriteLine(ConfFile1,8,confDark)
-    'File.WriteLine(ConfFile1,8,SaveFilePath)
   Else
     userName= File.ReadLine(ConfFile1,1)
     confWidth = File.ReadLine(ConfFile1,2)
@@ -60,7 +29,6 @@ Sub InitLoad
     confBrushColor = File.ReadLine(ConfFile1,6)
     confBackgroundColor= File.ReadLine(ConfFile1,7)
     confDark= File.ReadLine(ConfFile1,8)
-    'SaveFilePath = File.ReadLine(ConfFile1,8)
     initTemplate=File.ReadContents(ConfFile2) 
     inittext = "# " + userName + " (" + Clock.Date +"）" + sbCrLf2 + InitTemplate
   EndIf
@@ -70,7 +38,6 @@ Endsub
 Sub InitCommon
   SaveButton = Controls.AddButton("完了してファイルを保存する", 10, 1)
   Controls.SetSize(SaveButton, 300, 30)
-  
   GraphicsWindow.Title = "Version  " + Version + " 開始時刻： " + Clock.Time
   GraphicsWindow.Width = confWidth
   GraphicsWindow.Height = confHeight
@@ -86,7 +53,6 @@ Sub InitCommon
   Controls.SetTextBoxText(memo, inittext)
   tstart=Clock.ElapsedMilliseconds
   InitTextLength=Text.GetLength(  inittext)
-  'ExtLib.SendIMEKeys()
   TextUnsaved = 0
   if Text.ConvertToUpperCase(confDark) = "DARK" then
     a=ExtLib.SetDarkmodeControl(memo)
@@ -115,8 +81,6 @@ Sub BUTTONCLICK
     GraphicsWindow.ShowMessage( getfilename + sbCrLf + "執筆の経過時間   " + Math.Ceiling((tmiddle-tstart)/1000/60) + "分 合計"   + len + " 文字です。" ,("テキスト保存しました。") )
   EndIf
 EndSub
-
-
 
 Sub SaveLocalFile
   len = Text.GetLength(Controls.GetTextBoxText(memo) ) - InitTextLength
