@@ -1,18 +1,5 @@
-Version="Ver 1.4.3-20210402"
-'和暦対応
-'V1.4 2021/04/02 IME安定性変更、リファクタリング
-'V1.3 2021/03/31 Mutex
-'V1.2 2021/03/25 ごみバコ実装
-'V1.1 2021/03/24 DarkMode実装実装
-'V1.0 2021/03/20 簡易メモ帳として実装
-'V0.11 2019/05/27 バックアップをわかるようにした
-'V0.11 2019/05/13 バックアップ機能
-'V0.10 2019/04/25 ほかの人用のカスタマイズ版
-
-'Interbalではなく文字を入力するたびに
-'メモリにコピーする。Intervalでコントロールに触れない
-
-'DebugMode="true"
+Version="Ver 1.5.3-20210402"
+'V1.5 2021/04/02 背景画像、透明度
 DebugMode="false"
 sbCr = Text.GetCharacter(13)
 sbLf =  Text.GetCharacter(10)
@@ -39,20 +26,6 @@ Sub PubInitLoad
   EndFor
   If DebugMode="true" Then
     userName= "TmpClip"
-    inittext = "TmpClip"
-    confWidth = 800
-    confHeight = 600
-    confFontName = "Meiryo UI"
-    confFontSize = 16
-    confBrushColor = "Black"
-    confBackgroundColor = "green"
-    File.WriteLine(ConfFile1,1,userName)
-    File.WriteLine(ConfFile1,2,confWidth)
-    File.WriteLine(ConfFile1,3,confHeight)
-    File.WriteLine(ConfFile1,4,confFontName)
-    File.WriteLine(ConfFile1,5,confFontSize)
-    File.WriteLine(ConfFile1,6,confBrushColor)
-    File.WriteLine(ConfFile1,7,confBackgroundColor)
   Else
     userName= File.ReadLine(ConfFile1,1)
     confWidth = File.ReadLine(ConfFile1,2)
@@ -62,6 +35,15 @@ Sub PubInitLoad
     confBrushColor = File.ReadLine(ConfFile1,6)
     confBackgroundColor= File.ReadLine(ConfFile1,7)
     confDark= File.ReadLine(ConfFile1,8)
+    confOpacity = File.ReadLine(ConfFile1,9)
+    confUrls[1] = File.ReadLine(ConfFile1,10)
+    If Text.GetIndexOf(confUrls[1],":") = 0 Then
+      confUrls[1]=Program.Directory +"\" + confUrls[1]
+    EndIf
+    confUrls[2] = File.ReadLine(ConfFile1,11)
+    If Text.GetIndexOf(confUrls[2],":") = 0 Then
+      confUrls[2]=Program.Directory +"\" + confUrls[2]
+    EndIf
     For i=1 To MAXFILE
       TextData[i]=File.ReadContents(DataFile[i])
       TextUnsaved[i] = 0
@@ -86,19 +68,20 @@ Sub PubInitCommon
   GraphicsWindow.FontSize = confFontSize
   
   memo = Controls.AddMultiLineTextBox(TEXT_X_AXIS, TEXT_Y_AXIS)
-  Controls.SetSize(memo, GraphicsWindow.Width-2, GraphicsWindow.Height-55)
+  Controls.SetSize(memo, GraphicsWindow.Width-TEXT_X_AXIS, GraphicsWindow.Height-TEXT_Y_AXIS)
   Controls.SetTextBoxText(memo, TextData[DataCurrent])
   SubNoSaveAndInit()
-  'ExtLib.DisableExitButton()
+  aWall[1]=ImageList.LoadImage(confUrls[1])
+  aWall[2]=ImageList.LoadImage(confUrls[2])
+  GraphicsWindow.DrawImage(aWall[1],0,0)
+  GraphicsWindow.DrawResizedImage(aWall[2],TEXT_X_AXIS,TEXT_Y_AXIS,GraphicsWindow.Width-TEXT_X_AXIS, GraphicsWindow.Height-TEXT_Y_AXIS)
+  
   ExtLib.DisableMaxMinExitButton()
   If Text.ConvertToUpperCase(confDark) = "DARK" Then
-    a=ExtLib.SetDarkmodeControl(memo)
+    a=ExtLib.SetDarkmodeControl(memo,confOpacity)
     ExtLib.SetDarkMode_Explorer("dark")
   EndIf
   ExtLib.SetFocusControl(memo)
-  'ExtLib.WSendKeys("{{kanji}}")
-  'ExtLib.SendIMEKeys()
-  'ExtLib.SendIMEKey2hanzen()
 EndSub
 
 Sub SubNoSaveAndInit
@@ -139,7 +122,6 @@ Sub EventMOUSEDOWN
 EndSub
 
 Sub EventUPDATEINTERVAL
-  'ExtLib.MutexWaitOne()
   OneTextChangedChk()
   If sense = TextUnsaved[DataCurrent] And TextUnsaved[DataCurrent] <> 0Then
     SubSaveAndInit()
@@ -155,7 +137,6 @@ Sub EventUPDATEINTERVAL
     SubUpdateTitleBarText()
     sense = TextUnsaved[DataCurrent]
   EndIf
-  'ExtLib.MutexRelease()
 EndSub
 
 Sub OneSwitchMemo

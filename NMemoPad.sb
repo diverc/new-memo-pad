@@ -1,5 +1,4 @@
 Version="Ver 1.00.7-20210320"
-
 DebugMode="false"
 sbCr = Text.GetCharacter(13)
 sbLf =  Text.GetCharacter(10)
@@ -38,6 +37,7 @@ Endsub
 Sub InitCommon
   SaveButton = Controls.AddButton("完了してファイルを保存する", 10, 1)
   Controls.SetSize(SaveButton, 300, 30)
+  
   GraphicsWindow.Title = "Version  " + Version + " 開始時刻： " + Clock.Time
   GraphicsWindow.Width = confWidth
   GraphicsWindow.Height = confHeight
@@ -55,7 +55,7 @@ Sub InitCommon
   InitTextLength=Text.GetLength(  inittext)
   TextUnsaved = 0
   if Text.ConvertToUpperCase(confDark) = "DARK" then
-    a=ExtLib.SetDarkmodeControl(memo)
+    a=ExtLib.SetDarkmodeControl(memo,1.0)
   EndIf
 EndSub
 
@@ -81,6 +81,8 @@ Sub BUTTONCLICK
     GraphicsWindow.ShowMessage( getfilename + sbCrLf + "執筆の経過時間   " + Math.Ceiling((tmiddle-tstart)/1000/60) + "分 合計"   + len + " 文字です。" ,("テキスト保存しました。") )
   EndIf
 EndSub
+
+
 
 Sub SaveLocalFile
   len = Text.GetLength(Controls.GetTextBoxText(memo) ) - InitTextLength
