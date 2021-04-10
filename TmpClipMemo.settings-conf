@@ -1,4 +1,4 @@
-20
+22
 2
 1
 殴り書き メモ
@@ -11,6 +11,7 @@ green
 DARK
 0
 100
+60
 0.8
 head.png
 head2.png
@@ -20,5 +21,7 @@ C:\Windows\Web\Wallpaper\Theme1\img4.jpg
 white
 520
 450
+NoneInitWithTemplate
 ToDo
 ImportExport
+NoneSwitchButtonToExport

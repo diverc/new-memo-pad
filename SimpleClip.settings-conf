@@ -1,4 +1,4 @@
-20
+22
 1
 1
 一時領域
@@ -11,6 +11,7 @@ SlateGray
 DARK
 0
 20
+20
 0.8
 
 
@@ -20,5 +21,7 @@ C:\Windows\Web\Wallpaper\Theme1\img1.jpg
 white
 580
 500
-OFF
-OFF
+NoneInitWithTemplate
+NoneToDo
+NoneImportExport
+NoneSwitchButtonToExport
