@@ -1,0 +1,11 @@
+'1	2	3 
+Controls.ButtonClicked = tsv2mdtable
+ButtonCaption1 = Controls.AddButton("Excel の表をクリップボード経由でMarkdownにする", 0,0)
+
+Sub tsv2mdtable
+  tmp1a=ExtLib.GetClipboardText()
+  tmp1B=ExtLib.MakeMDtableFromTSV(tmp1a,ExtLib.SBTab)
+  ExtLib.SetClipboardText(tmp1B)
+  GraphicsWindow.ShowMessage(tmp1B,"クリップボードにコピーしました。終了します")
+  Program.End()
+EndSub
