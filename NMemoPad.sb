@@ -1,6 +1,13 @@
-BUILDNUMBER=71
-Version="Ver 1.00.7-20210320-" + BUILDNUMBER 
+BUILDNUMBER=182
+Version="Ver 1.2.8-20210320-" + BUILDNUMBER 
 ConfVersion=2
+VS="confパス変更"
+'V1.2  2021/06/22 Confのパス変更
+'V1.1  2021/04/06 標準機能だけに変更
+'V1.00 2021/03/20 簡易メモ帳として実装
+'V0.11 2019/05/27 バックアップをわかるようにした
+'V0.11 2019/05/13 バックアップ機能
+'V0.10 2019/04/25 ほかの人用のカスタマイズ版
 
 sbCr = Text.GetCharacter(13)
 sbLf =  Text.GetCharacter(10)
@@ -8,6 +15,7 @@ sbCrLf = sbCr + sbLf
 sbCrLf2 = sbCrLf + sbCrLf
 sbDq = Text.GetCharacter(34)
 
+'init
 InitLoad()
 InitCommon()
 Controls.TextTyped = TextChanged
@@ -15,9 +23,10 @@ Controls.ButtonClicked = BUTTONCLICK
 Timer.Interval = 60000
 Timer.Tick = UPDATEINTERVAL
 
+'-------------------------
 Sub InitLoad
-  ConfFile1 = File.GetSettingsFilePath() + "-conf"
-  ConfFile2 = File.GetSettingsFilePath() + "-init"
+  ConfFile1 = Program.Directory  + "\Conf\NMemoPad\NMemoPad.settings-conf"
+  ConfFile2 = Program.Directory  + "\Conf\NMemoPad\NMemoPad.settings-init"
   confVer = File.ReadLine(ConfFile1,1)
   If confVer <> ConfVersion Then
     GraphicsWindow.ShowMessage("設定ファイルの定義バージョンが一致しませんので終了します","エラー")
